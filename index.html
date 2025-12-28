@@ -225,11 +225,12 @@
 
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: 600;
             color: var(--text-primary);
             font-size: 1.1em;
             letter-spacing: 0.5px;
+            text-transform: capitalize;
         }
 
         input, select, textarea {
@@ -699,68 +700,69 @@
 
         <!-- Tab Navigation -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('metadata')">📋 Metadata</button>
-            <button class="tab-btn" onclick="switchTab('assets')">🖼️ Assets</button>
-            <button class="tab-btn" onclick="switchTab('badges')">💎 Badges & Effects</button>
-            <button class="tab-btn" onclick="switchTab('collectible')">🎁 Collectible</button>
+            <button class="tab-btn active" onclick="switchTab('metadata')">🎨 Artwork Info</button>
+            <button class="tab-btn" onclick="switchTab('assets')">🖼️ Visual Assets</button>
+            <button class="tab-btn" onclick="switchTab('badges')">✨ Enhancements</button>
+            <button class="tab-btn" onclick="switchTab('collectible')">💎 Edition Details</button>
             <button class="tab-btn" onclick="switchTab('advanced')">⚙️ Advanced</button>
         </div>
 
         <!-- Metadata Tab -->
         <div id="metadata-tab" class="tab-content active">
             <div class="neu-card">
-                <h2 class="section-title">Card Identity</h2>
+                <h2 class="section-title">Artwork Details</h2>
                 <div class="form-grid">
                     <div>
                         <div class="form-group">
-                            <label>Card Name *</label>
-                            <input type="text" id="cardName" placeholder="Cosmic Fire Dragon">
+                            <label>Artwork Title *</label>
+                            <input type="text" id="cardName">
                         </div>
                         <div class="form-group">
-                            <label>Caption / Subtitle</label>
-                            <input type="text" id="caption" placeholder="Master of the Stellar Flames">
+                            <label>Subtitle</label>
+                            <input type="text" id="caption">
                         </div>
                         <div class="form-group">
-                            <label>Brand</label>
-                            <select id="brand">
-                                <option value="INSPIRE">INSPIRE</option>
-                                <option value="iSmokeShop">iSmokeShop</option>
-                                <option value="DANTES WORLD">DANTES WORLD</option>
-                                <option value="Custom">Custom</option>
-                            </select>
+                            <label>Artist Name</label>
+                            <input type="text" id="artist">
                         </div>
                     </div>
                     <div>
                         <div class="form-group">
-                            <label>Set Name</label>
-                            <input type="text" id="setName" placeholder="Alpha Collection" value="Alpha Collection">
+                            <label>Collection Name</label>
+                            <input type="text" id="setName">
                         </div>
                         <div class="form-group">
-                            <label>Card Number</label>
+                            <label>Edition Number</label>
                             <div style="display: flex; gap: 10px; align-items: center;">
-                                <input type="text" id="cardNumber" placeholder="001" style="width: 50%;">
+                                <input type="text" id="cardNumber" style="width: 50%;">
                                 <span style="font-size: 1.5em; font-weight: 700;">/</span>
-                                <input type="text" id="totalInSet" placeholder="100" style="width: 50%;">
+                                <input type="text" id="totalInSet" style="width: 50%;">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Category</label>
+                            <label>Art Style</label>
                             <select id="category">
-                                <option value="general">General</option>
-                                <option value="character">Character</option>
-                                <option value="location">Location</option>
-                                <option value="item">Item</option>
-                                <option value="event">Event</option>
-                                <option value="achievement">Achievement</option>
+                                <option value="digital-art">Digital Art</option>
+                                <option value="3d-render">3D Render</option>
+                                <option value="photography">Photography</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                                <option value="generative">Generative</option>
+                                <option value="mixed-media">Mixed Media</option>
+                                <option value="pixel-art">Pixel Art</option>
+                                <option value="vector">Vector Art</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">Classification</h2>
+                <h2 class="section-title" style="margin-top: 40px;">
+                    <span style="background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Collectible Properties</span>
+                </h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Rarity</label>
+                        <label>Rarity Tier</label>
                         <select id="rarity">
                             <option value="common">⚪ Common</option>
                             <option value="uncommon">🟢 Uncommon</option>
@@ -768,30 +770,47 @@
                             <option value="epic">🟣 Epic</option>
                             <option value="legendary">🟠 Legendary</option>
                             <option value="mythic">🔴 Mythic</option>
+                            <option value="one-of-one">💎 1/1</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Type</label>
-                        <input type="text" id="cardType" placeholder="Collectible" value="collectible">
+                        <label>Asset Type</label>
+                        <select id="cardType">
+                            <option value="collectible">Digital Collectible</option>
+                            <option value="art-piece">Art Piece</option>
+                            <option value="limited-edition">Limited Edition</option>
+                            <option value="exclusive">Exclusive Release</option>
+                            <option value="commemorative">Commemorative</option>
+                        </select>
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">Content</h2>
+                <div class="form-grid" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>Brand / Creator</label>
+                        <select id="brand">
+                            <option value="INSPIRE">INSPIRE</option>
+                            <option value="iSmokeShop">iSmokeShop</option>
+                            <option value="DANTES WORLD">DANTES WORLD</option>
+                            <option value="Custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (comma separated)</label>
+                        <input type="text" id="tags">
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 40px;">
+                    <span style="background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Artwork Description</span>
+                </h2>
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea id="description" placeholder="Enter card description and abilities..."></textarea>
+                    <textarea id="description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Flavor Text</label>
-                    <textarea id="flavorText" placeholder="Enter atmospheric flavor text..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Tags (comma separated)</label>
-                    <input type="text" id="tags" placeholder="fire, dragon, cosmic, legendary">
-                </div>
-                <div class="form-group">
-                    <label>Artist</label>
-                    <input type="text" id="artist" placeholder="Artist Name" value="INSPIRE Studios">
+                    <label>Story / Context</label>
+                    <textarea id="flavorText"></textarea>
                 </div>
             </div>
         </div>
@@ -799,14 +818,16 @@
         <!-- Assets Tab -->
         <div id="assets-tab" class="tab-content">
             <div class="neu-card">
-                <h2 class="section-title">Card Images</h2>
+                <h2 class="section-title">
+                    <span style="background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Primary Artwork</span>
+                </h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Card Front Image *</label>
+                        <label>Front Artwork *</label>
                         <div class="file-upload-wrapper">
                             <div class="file-upload" id="frontUpload" onclick="document.getElementById('cardFront').click()">
                                 <div class="file-upload-icon">🖼️</div>
-                                <div class="file-upload-text">Click to upload front image</div>
+                                <div class="file-upload-text">Upload primary artwork</div>
                                 <input type="file" id="cardFront" accept="image/*" style="display: none;">
                             </div>
                             <div class="preview-container" id="frontPreviewContainer" style="display: none;">
@@ -815,11 +836,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Card Back Image</label>
+                        <label>Back Artwork</label>
                         <div class="file-upload-wrapper">
                             <div class="file-upload" id="backUpload" onclick="document.getElementById('cardBack').click()">
                                 <div class="file-upload-icon">🎴</div>
-                                <div class="file-upload-text">Click to upload back image</div>
+                                <div class="file-upload-text">Upload back artwork</div>
                                 <input type="file" id="cardBack" accept="image/*" style="display: none;">
                             </div>
                             <div class="preview-container" id="backPreviewContainer" style="display: none;">
@@ -829,7 +850,9 @@
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">Overlays & Logos</h2>
+                <h2 class="section-title" style="margin-top: 40px;">
+                    <span style="background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Premium Overlays & Branding</span>
+                </h2>
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Holographic Pattern</label>
@@ -903,14 +926,16 @@
         <!-- Badges & Effects Tab -->
         <div id="badges-tab" class="tab-content">
             <div class="neu-card">
-                <h2 class="section-title">Specialty Badges</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 20px;">Add badges to enhance your card's visual appeal</p>
+                <h2 class="section-title">
+                    <span style="background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Visual Enhancements</span>
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.1em;">Add premium badges and emblems to enhance your collectible's visual appeal</p>
                 <div class="badge-grid" id="badgeGrid"></div>
-                
+
                 <div class="badge-manager">
-                    <h3 style="margin-top: 25px; margin-bottom: 15px; font-weight: 700;">Selected Badges</h3>
+                    <h3 style="margin-top: 30px; margin-bottom: 15px; font-weight: 700; font-size: 1.3em; color: var(--text-primary);">Selected Enhancements</h3>
                     <div class="badge-list" id="selectedBadges">
-                        <div style="color: var(--text-light); font-style: italic;">No badges added yet</div>
+                        <div style="color: var(--text-light); font-style: italic;">No enhancements added yet</div>
                     </div>
                 </div>
             </div>
@@ -1035,42 +1060,46 @@
         <!-- Collectible Tab -->
         <div id="collectible-tab" class="tab-content">
             <div class="neu-card">
-                <h2 class="section-title">Collectible Settings</h2>
-                
+                <h2 class="section-title">
+                    <span style="background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Collectible Settings</span>
+                </h2>
+
                 <div class="effect-toggle" style="margin-bottom: 30px;">
                     <div class="toggle-switch" id="rewardToggle" onclick="toggleEffect('reward')"></div>
-                    <label style="margin: 0; font-weight: 700; font-size: 1.2em;">Mark as Reward Card</label>
+                    <label style="margin: 0; font-weight: 700; font-size: 1.2em;">Mark as Special Unlockable</label>
                 </div>
 
                 <div id="rewardControls" style="display: none;">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Reward For</label>
-                            <input type="text" id="rewardFor" placeholder="Completing Level 10, First Victory, etc.">
+                            <label>Unlockable For</label>
+                            <input type="text" id="rewardFor">
                         </div>
                         <div class="form-group">
-                            <label>Unlock Condition</label>
-                            <input type="text" id="unlockCondition" placeholder="Reach 1000 points">
+                            <label>Unlock Requirement</label>
+                            <input type="text" id="unlockCondition">
                         </div>
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">Limited Edition</h2>
+                <h2 class="section-title" style="margin-top: 40px;">
+                    <span style="background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Limited Edition Details</span>
+                </h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Mint Number</label>
-                        <input type="number" id="mintNumber" placeholder="1" min="1">
+                        <label>This Edition (#)</label>
+                        <input type="number" id="mintNumber" min="1">
                     </div>
                     <div class="form-group">
-                        <label>Total Minted</label>
-                        <input type="number" id="totalMinted" placeholder="100" min="1">
+                        <label>Total Editions</label>
+                        <input type="number" id="totalMinted" min="1">
                     </div>
                 </div>
 
-                <div class="neu-inset" style="margin-top: 25px; padding: 25px;">
-                    <p style="font-size: 1.1em; color: var(--text-secondary);">
-                        <strong style="color: var(--text-primary);">Serial Number Preview:</strong><br>
-                        <span id="serialPreview" style="font-size: 1.5em; font-weight: 700; color: var(--accent-primary);">#0001/0100</span>
+                <div class="neu-inset" style="margin-top: 25px; padding: 30px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 255, 136, 0.05));">
+                    <p style="font-size: 1.1em; color: var(--text-secondary); text-align: center;">
+                        <strong style="color: var(--text-primary); font-size: 1.2em;">Edition Number Preview</strong><br>
+                        <span id="serialPreview" style="font-size: 2em; font-weight: 700; background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-top: 10px;">#0001/0100</span>
                     </p>
                 </div>
             </div>
@@ -1121,11 +1150,13 @@
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">Creator Info</h2>
+                <h2 class="section-title" style="margin-top: 30px;">
+                    <span style="background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Creator Information</span>
+                </h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Creator ID</label>
-                        <input type="text" id="creator" placeholder="your-username" value="INSPIRE">
+                        <label>Creator ID / Username</label>
+                        <input type="text" id="creator">
                     </div>
                     <div class="form-group">
                         <label>Network</label>
