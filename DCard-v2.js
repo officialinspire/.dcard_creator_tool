@@ -116,20 +116,29 @@ class DCard {
         cardFront: options.cardFront || null,
         cardBack: options.cardBack || null,
         holographicPattern: options.holographicPattern || null,
-        
+
         // Brand assets
         brandLogo: options.brandLogoAsset || null,
         setLogo: options.setLogoAsset || null,
-        
+
         // Specialty overlays
         specialtyOverlay: options.specialtyOverlay || null,
         frameOverlay: options.frameOverlay || null,
-        
+
         thumbnail: options.thumbnail || null,
-        
+
         audio: {
           theme: options.audioTheme || null,
-          effects: options.audioEffects || []
+          effects: options.audioEffects || [],
+          settings: {
+            volume: options.audioVolume !== undefined ? options.audioVolume : 80,
+            fadeIn: options.audioFadeIn !== undefined ? options.audioFadeIn : 2.0,
+            fadeOut: options.audioFadeOut !== undefined ? options.audioFadeOut : 2.0,
+            startTime: options.audioStartTime !== undefined ? options.audioStartTime : 0,
+            loop: options.audioLoop || false,
+            autoplay: options.audioAutoplay || false,
+            instructions: options.audioInstructions || ''
+          }
         }
       },
       
