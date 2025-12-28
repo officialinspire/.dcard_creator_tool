@@ -2066,7 +2066,7 @@
             <button class="btn-secondary" onclick="resetForm()">🔄 Reset</button>
         </div>
 
-        <input type="file" id="loadFile" accept=".dcard" style="display: none;">
+        <input type="file" id="loadFile" accept=".dcard,.zip" style="display: none;">
         <div id="successMessage"></div>
     </div>
 
@@ -2099,6 +2099,7 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="DCard-v2.js"></script>
     <script>
         const dcard = new DCard();
@@ -2474,14 +2475,16 @@
                 `;
                 document.getElementById('statsPanel').style.display = 'block';
 
-                // Download
-                dcard.download(card);
+                // Export with assets
+                await dcard.exportWithAssets(card);
 
                 // Success message
+                const folderName = `${cardName.replace(/\s+/g, '-').toLowerCase()}-${card.fingerprint.substring(0, 8)}`;
                 document.getElementById('successMessage').innerHTML = `
                     <div class="success-message">
                         ✨ Card Created Successfully! ✨<br>
-                        <strong>${cardName}.dcard</strong> has been downloaded
+                        <strong>${folderName}.zip</strong> has been downloaded<br>
+                        <small>Contains card file and all assets</small>
                     </div>
                 `;
 
