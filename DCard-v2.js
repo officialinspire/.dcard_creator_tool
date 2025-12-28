@@ -77,9 +77,38 @@ class DCard {
           unlockCondition: options.unlockCondition || '',
           mintNumber: options.mintNumber || null,
           totalMinted: options.totalMinted || null,
-          serialNumber: options.serialNumber || null
+          serialNumber: options.serialNumber || null,
+          releaseDate: options.releaseDate || null,
+          editionType: options.editionType || 'standard',
+
+          // Attributes & Traits
+          condition: options.condition || 'mint',
+          gradingService: options.gradingService || '',
+          gradeScore: options.gradeScore || '',
+          certificateNumber: options.certificateNumber || '',
+          customAttributes: options.customAttributes || '',
+
+          // Ownership & License
+          licenseType: options.licenseType || 'all-rights-reserved',
+          commercialRights: options.commercialRights || 'none',
+          originalOwner: options.originalOwner || '',
+          currentOwner: options.currentOwner || '',
+
+          // Provenance
+          blockchainHash: options.blockchainHash || '',
+          contractAddress: options.contractAddress || '',
+          tokenId: options.tokenId || '',
+          provenanceNotes: options.provenanceNotes || '',
+
+          // Certification
+          certified: options.certified || false,
+          artistVerified: options.artistVerified || false,
+          limitedEditionBadge: options.limitedEditionBadge || false,
+          exclusiveRelease: options.exclusiveRelease || false,
+          certAuthority: options.certAuthority || '',
+          certDate: options.certDate || null
         },
-        
+
         custom: options.custom || {}
       },
       
@@ -111,33 +140,69 @@ class DCard {
           intensity: options.holographicIntensity || 0.5,
           pattern: options.holographicPattern || 'rainbow',
           speed: options.holographicSpeed || 1.0,
+          angle: options.holographicAngle || 45,
+          shift: options.holographicShift || 30,
+          primaryColor: options.holographicPrimaryColor || '#00d4ff',
+          secondaryColor: options.holographicSecondaryColor || '#ff00aa',
+          layered: options.holographicLayered || false,
+          blendMode: options.holographicBlendMode || 'overlay',
           customShader: options.customShader || null
         },
-        
+
         // Specialty badges
         badges: options.badges || [],
-        
+
         // Visual effects
         effects: {
           glow: options.glowEffect || false,
           glowColor: options.glowColor || '#00ff88',
           glowIntensity: options.glowIntensity || 0.5,
-          
+
           particles: options.particleEffect || false,
           particleType: options.particleType || 'sparkles',
           particleColor: options.particleColor || '#ffffff',
           particleCount: options.particleCount || 20,
-          
+
           border: options.borderEffect || false,
           borderStyle: options.borderStyle || 'solid',
           borderColor: options.borderColor || '#00ff88',
           borderWidth: options.borderWidth || 2,
-          
+
           shadow: options.shadowEffect || false,
           shadowColor: options.shadowColor || '#000000',
-          shadowBlur: options.shadowBlur || 20
+          shadowBlur: options.shadowBlur || 20,
+
+          // New visual effects
+          blur: options.blurEffect || false,
+          blurIntensity: options.blurIntensity || 2,
+          blurDirection: options.blurDirection || 'horizontal',
+
+          chromatic: options.chromaticEffect || false,
+          chromaticOffset: options.chromaticOffset || 3,
+
+          vignette: options.vignetteEffect || false,
+          vignetteStrength: options.vignetteStrength || 0.5,
+          vignetteSize: options.vignetteSize || 0.7,
+
+          scanlines: options.scanlinesEffect || false,
+          scanlinesDensity: options.scanlinesDensity || 4,
+          scanlinesOpacity: options.scanlinesOpacity || 0.3,
+
+          bloom: options.bloomEffect || false,
+          bloomThreshold: options.bloomThreshold || 0.8,
+          bloomIntensity: options.bloomIntensity || 1.5
         },
-        
+
+        // Color grading
+        colorGrading: {
+          brightness: options.brightness || 1.0,
+          contrast: options.contrast || 1.0,
+          saturation: options.saturation || 1.0,
+          hueShift: options.hueShift || 0,
+          tintColor: options.tintColor || '#ffffff',
+          tintStrength: options.tintStrength || 0
+        },
+
         // Animation settings
         animation: {
           rotationSpeed: options.rotationSpeed || 0.005,
@@ -145,9 +210,18 @@ class DCard {
           floatRange: options.floatRange || 0.1,
           pulseAnimation: options.pulseAnimation || false,
           pulseSpeed: options.pulseSpeed || 1.0,
+          bounceAnimation: options.bounceAnimation || false,
+          spinAnimation: options.spinAnimation || false,
+          spinDuration: options.spinDuration || 2,
+          wobbleAnimation: options.wobbleAnimation || false,
+          wobbleIntensity: options.wobbleIntensity || 5,
+          flipAnimation: options.flipAnimation || false,
+          shakeAnimation: options.shakeAnimation || false,
+          swingAnimation: options.swingAnimation || false,
+          easing: options.animationEasing || 'ease-in-out',
           customAnimation: options.customAnimation || null
         },
-        
+
         // Lighting
         lighting: {
           ambient: options.ambientLight || 0.4,
@@ -155,7 +229,37 @@ class DCard {
           specular: options.specularLight || 1.0,
           colorTemperature: options.colorTemperature || 6500
         },
-        
+
+        // Rendering & Performance
+        rendering: {
+          quality: options.renderQuality || 'high',
+          textureResolution: options.textureResolution || '2048',
+          antiAliasing: options.antiAliasing || 'msaa-4x',
+          shadowQuality: options.shadowQuality || 'medium',
+          maxFps: options.maxFps || '60',
+          vsync: options.vsync || 'on'
+        },
+
+        // Export settings
+        export: {
+          imageCompression: options.imageCompression || 'medium',
+          format: options.exportFormat || 'dcard',
+          metadataEmbed: options.metadataEmbed || 'full',
+          assetOptimization: options.assetOptimization || 'standard',
+          embedAssets: options.embedAssets !== false,
+          generateThumbnail: options.generateThumbnail || false,
+          includeMetadata: options.includeMetadata !== false,
+          watermark: options.watermark || false
+        },
+
+        // Advanced features
+        advanced: {
+          debugMode: options.debugMode || false,
+          performanceMonitor: options.performanceMonitor || false,
+          autoSave: options.autoSave || false,
+          versionControl: options.versionControl || false
+        },
+
         // Overlay composition
         overlays: {
           specialty: options.specialtyOverlayConfig || null,
