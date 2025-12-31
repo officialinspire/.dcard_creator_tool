@@ -230,6 +230,313 @@
             50% { opacity: 0.3; }
         }
 
+        /* Immersive 3D Card Viewer */
+        .viewer-shell {
+            position: relative;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .viewer-shell .section-title {
+            margin-bottom: 12px;
+        }
+
+        .viewer-menu-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            background: linear-gradient(120deg, rgba(109, 220, 255, 0.08), rgba(127, 96, 249, 0.08));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.04),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-cluster {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-trigger {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .menu-trigger.active,
+        .menu-trigger:hover {
+            background: var(--gradient-3);
+            color: white;
+            border-color: transparent;
+            box-shadow:
+                0 10px 28px rgba(109, 220, 255, 0.3),
+                0 0 25px rgba(127, 96, 249, 0.25);
+        }
+
+        .menu-popover {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 320px;
+            background: rgba(7, 12, 29, 0.96);
+            border: 1px solid rgba(109, 220, 255, 0.35);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.55),
+                0 0 30px rgba(109, 220, 255, 0.2);
+            z-index: 4;
+            display: none;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .menu-popover.open {
+            display: flex;
+        }
+
+        .menu-popover .control-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .menu-popover label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .mini-range {
+            accent-color: #6ddcff;
+        }
+
+        .viewer-stage {
+            position: relative;
+            padding: 26px 10px 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            justify-items: center;
+            gap: 18px;
+        }
+
+        .viewer-gradient {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 10%, rgba(109, 220, 255, 0.15), transparent 30%),
+                        radial-gradient(circle at 80% 0%, rgba(127, 96, 249, 0.22), transparent 32%),
+                        radial-gradient(circle at 50% 85%, rgba(0, 255, 179, 0.18), transparent 28%);
+            filter: blur(18px);
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        .card-viewer {
+            position: relative;
+            width: min(360px, 90vw);
+            height: min(520px, 130vw);
+            transform-style: preserve-3d;
+            transform: rotateX(var(--rotateX, -10deg)) rotateY(calc(var(--rotateY, 18deg) + var(--flip, 0deg))) translateZ(var(--depth, 0px));
+            transition: transform 0.6s ease, filter 0.3s ease;
+            perspective: 1800px;
+            filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(109, 220, 255, 0.4));
+        }
+
+        .card-viewer.auto-rotate {
+            animation: slowSpin calc(var(--spinSpeed, 16s)) linear infinite;
+        }
+
+        @keyframes slowSpin {
+            from { transform: rotateX(var(--rotateX, -10deg)) rotateY(calc(var(--rotateY, 18deg) + var(--flip, 0deg) + 0deg)) translateZ(var(--depth, 0px)); }
+            to { transform: rotateX(var(--rotateX, -10deg)) rotateY(calc(var(--rotateY, 18deg) + var(--flip, 0deg) + 360deg)) translateZ(var(--depth, 0px)); }
+        }
+
+        .viewer-card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            backface-visibility: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 12px 32px rgba(0, 0, 0, 0.35);
+        }
+
+        .viewer-card-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .viewer-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.05);
+        }
+
+        .viewer-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent 35%),
+                        radial-gradient(circle at 80% 0%, rgba(109, 220, 255, 0.12), transparent 40%);
+            mix-blend-mode: screen;
+            opacity: var(--overlayAlpha, 0.35);
+            pointer-events: none;
+        }
+
+        .viewer-card-shine {
+            position: absolute;
+            inset: -20%;
+            background: linear-gradient(
+                var(--shineAngle, 125deg),
+                transparent 0%,
+                rgba(255, 255, 255, 0.08) 42%,
+                rgba(109, 220, 255, 0.35) 50%,
+                transparent 58%
+            );
+            opacity: var(--shineAlpha, 0.45);
+            transform: translateX(-30%);
+            animation: shineSweep 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shineSweep {
+            0%, 10% { transform: translateX(-30%); opacity: 0.12; }
+            40% { opacity: 0.45; }
+            60%, 100% { transform: translateX(40%); opacity: 0.12; }
+        }
+
+        .viewer-card-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .viewer-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .viewer-badge {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+        }
+
+        .viewer-card-title {
+            font-size: 1.4em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+        }
+
+        .viewer-card-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 0.95em;
+            color: var(--text-secondary);
+        }
+
+        .viewer-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .viewer-brand {
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-weight: 700;
+            letter-spacing: 0.6px;
+        }
+
+        .viewer-id {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-shadow: 0 10px 30px rgba(109, 220, 255, 0.35);
+        }
+
+        .viewer-footer-bar {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .viewer-dots {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .viewer-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gradient-3);
+            box-shadow: 0 0 18px rgba(109, 220, 255, 0.5);
+        }
+
+        .viewer-readout {
+            display: flex;
+            gap: 14px;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            align-items: center;
+        }
+
+        .viewer-readout strong {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .viewer-menu-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .menu-popover {
+                position: relative;
+                width: 100%;
+                top: 0;
+                left: 0;
+                margin-top: 6px;
+            }
+        }
+
         /* Tab Navigation */
         .tab-nav {
             display: flex;
@@ -1083,6 +1390,133 @@
                 <span class="dot"></span>
                 INSPIRE NETWORK LIVE
                 <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="neu-card viewer-shell">
+            <div class="viewer-menu-bar">
+                <div>
+                    <h2 class="section-title" style="margin: 0;">3D Card Viewer</h2>
+                    <p style="color: var(--text-secondary); margin-top: 4px;">See your card evolve in real time with the same stylized viewer experience used in the Inspire toolkit.</p>
+                </div>
+                <div class="menu-cluster">
+                    <button class="menu-trigger" data-target="viewMenu">🎛️ View Menu</button>
+                    <div class="menu-popover" id="viewMenu">
+                        <div class="control-row">
+                            <label>Y Rotation</label>
+                            <input id="viewerRotate" class="mini-range" type="range" min="-45" max="45" value="18">
+                        </div>
+                        <div class="control-row">
+                            <label>X Tilt</label>
+                            <input id="viewerTilt" class="mini-range" type="range" min="-25" max="15" value="-8">
+                        </div>
+                        <div class="control-row">
+                            <label>Depth Boost</label>
+                            <input id="viewerDepth" class="mini-range" type="range" min="0" max="60" value="28">
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-cluster">
+                    <button class="menu-trigger" data-target="lightMenu">💡 Lighting Menu</button>
+                    <div class="menu-popover" id="lightMenu">
+                        <div class="control-row">
+                            <label>Glow / Bloom</label>
+                            <input id="viewerGlow" class="mini-range" type="range" min="0" max="100" value="35">
+                        </div>
+                        <div class="control-row">
+                            <label>Holo Shine</label>
+                            <input id="viewerShine" class="mini-range" type="range" min="0" max="100" value="50">
+                        </div>
+                        <div class="control-row">
+                            <label>Shine Angle</label>
+                            <input id="viewerShineAngle" class="mini-range" type="range" min="60" max="160" value="125">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="viewer-stage">
+                <div class="viewer-gradient"></div>
+                <div class="card-viewer auto-rotate" id="cardViewer" style="--rotateX: -8deg; --rotateY: 18deg; --spinSpeed: 16s; --overlayAlpha: 0.35; --shineAlpha: 0.45;">
+                    <div class="viewer-card-face front">
+                        <img id="viewerFrontImage" class="viewer-card-image" src="inspire.png" alt="Front preview">
+                        <div class="viewer-card-overlay"></div>
+                        <div class="viewer-card-shine"></div>
+                        <div class="viewer-card-content">
+                            <div class="viewer-card-header">
+                                <span class="viewer-badge" id="viewerRarity">RARE</span>
+                                <span class="viewer-id" id="viewerId">#0001</span>
+                            </div>
+                            <div>
+                                <div class="viewer-card-title" id="viewerTitle">Preview Title</div>
+                                <div class="viewer-card-meta" id="viewerMeta">Digital Collectible · Inspire</div>
+                            </div>
+                            <div class="viewer-card-footer">
+                                <span class="viewer-brand" id="viewerBrand">INSPIRE</span>
+                                <span class="viewer-brand" id="viewerSet">GENESIS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viewer-card-face back" id="viewerBackFace">
+                        <img id="viewerBackImage" class="viewer-card-image" src="inspire.png" alt="Back preview">
+                        <div class="viewer-card-overlay"></div>
+                        <div class="viewer-card-shine"></div>
+                        <div class="viewer-card-content" style="justify-content: center; text-align: center;">
+                            <div class="viewer-card-title" style="font-size: 1.1em;">Back Artwork Preview</div>
+                            <div class="viewer-card-meta">Upload an optional back image to view the flip.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="viewer-footer-bar">
+                    <div class="menu-cluster">
+                        <button class="menu-trigger" data-target="styleMenu">🎨 Style Menu</button>
+                        <div class="menu-popover" id="styleMenu">
+                            <div class="control-row">
+                                <label>Overlay Strength</label>
+                                <input id="viewerOverlay" class="mini-range" type="range" min="0" max="80" value="35">
+                            </div>
+                            <div class="control-row">
+                                <label>Shine Sweep</label>
+                                <input id="viewerShineAlpha" class="mini-range" type="range" min="0" max="100" value="45">
+                            </div>
+                            <div class="control-row">
+                                <label>Front / Back Blend</label>
+                                <input id="viewerFlip" class="mini-range" type="range" min="0" max="180" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-cluster">
+                        <button class="menu-trigger" data-target="motionMenu">🛰️ Motion Menu</button>
+                        <div class="menu-popover" id="motionMenu">
+                            <div class="control-row">
+                                <label>Auto Rotate</label>
+                                <input id="viewerAutoSpin" type="checkbox" checked>
+                            </div>
+                            <div class="control-row">
+                                <label>Auto Rotate Speed</label>
+                                <input id="viewerSpinSpeed" class="mini-range" type="range" min="6" max="28" value="16">
+                            </div>
+                            <div class="control-row">
+                                <label>Parallax Amount</label>
+                                <input id="viewerParallax" class="mini-range" type="range" min="0" max="30" value="18">
+                            </div>
+                            <div class="control-row">
+                                <label>Live Tracking</label>
+                                <input id="viewerTracking" type="checkbox" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="viewer-dots">
+                        <div class="viewer-dot"></div>
+                        <div class="viewer-dot"></div>
+                        <div class="viewer-dot"></div>
+                    </div>
+                    <div class="viewer-readout">
+                        <span>Angles: <strong id="viewerAnglesReadout">-8° / 18°</strong></span>
+                        <span>Shine: <strong id="viewerShineReadout">45%</strong></span>
+                        <span>Mode: <strong id="viewerModeReadout">Auto Spin</strong></span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2195,6 +2629,176 @@
         const dcard = new DCard();
         let selectedBadges = [];
 
+
+        const viewerState = {
+            rotateX: -8,
+            rotateY: 18,
+            depth: 28,
+            overlay: 0.35,
+            shine: 0.45,
+            shineAngle: 125,
+            glow: 35,
+            flip: 0,
+            autoSpin: true,
+            spinSpeed: 16,
+            parallax: 18,
+            tracking: true
+        };
+
+        function applyViewerState() {
+            const card = document.getElementById('cardViewer');
+            if (!card) return;
+
+            card.style.setProperty('--rotateX', `${viewerState.rotateX}deg`);
+            card.style.setProperty('--rotateY', `${viewerState.rotateY}deg`);
+            card.style.setProperty('--depth', `${viewerState.depth}px`);
+            card.style.setProperty('--overlayAlpha', viewerState.overlay);
+            card.style.setProperty('--shineAlpha', viewerState.shine);
+            card.style.setProperty('--shineAngle', `${viewerState.shineAngle}deg`);
+            card.style.setProperty('--flip', `${viewerState.flip}deg`);
+            card.style.setProperty('--spinSpeed', `${viewerState.spinSpeed}s`);
+            card.style.filter = `drop-shadow(0 25px 45px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 ${12 + (viewerState.glow / 12)}px rgba(109, 220, 255, 0.45))`;
+            card.classList.toggle('auto-rotate', viewerState.autoSpin);
+
+            const angles = document.getElementById('viewerAnglesReadout');
+            const shineReadout = document.getElementById('viewerShineReadout');
+            const modeReadout = document.getElementById('viewerModeReadout');
+            if (angles) angles.textContent = `${Math.round(viewerState.rotateX)}° / ${Math.round(viewerState.rotateY)}°`;
+            if (shineReadout) shineReadout.textContent = `${Math.round(viewerState.shine * 100)}%`;
+            if (modeReadout) modeReadout.textContent = viewerState.autoSpin ? 'Auto Spin' : 'Manual Tilt';
+        }
+
+        function toggleMenus(targetId, trigger) {
+            document.querySelectorAll('.menu-popover').forEach(pop => {
+                if (pop.id !== targetId) pop.classList.remove('open');
+            });
+            document.querySelectorAll('.menu-trigger').forEach(btn => {
+                if (btn !== trigger) btn.classList.remove('active');
+            });
+
+            const panel = document.getElementById(targetId);
+            if (panel) {
+                const shouldOpen = !panel.classList.contains('open');
+                panel.classList.toggle('open', shouldOpen);
+                if (shouldOpen && trigger) trigger.classList.add('active');
+            }
+        }
+
+        function closeMenus() {
+            document.querySelectorAll('.menu-popover').forEach(pop => pop.classList.remove('open'));
+            document.querySelectorAll('.menu-trigger').forEach(btn => btn.classList.remove('active'));
+        }
+
+        function updateCardViewerFace(face, src) {
+            if (!src) return;
+            const target = document.getElementById(face === 'back' ? 'viewerBackImage' : 'viewerFrontImage');
+            if (target) target.src = src;
+        }
+
+        function updateViewerText() {
+            const title = document.getElementById('cardName')?.value || 'Preview Title';
+            const brand = document.getElementById('brand')?.value || 'INSPIRE';
+            const set = document.getElementById('setName')?.value || 'GENESIS';
+            const rarity = document.getElementById('rarity')?.value || 'rare';
+            const type = document.getElementById('cardType')?.value || 'collectible';
+            const category = document.getElementById('category')?.value || 'digital-art';
+            const mint = document.getElementById('mintNumber')?.value || '1';
+
+            const titleNode = document.getElementById('viewerTitle');
+            const brandNode = document.getElementById('viewerBrand');
+            const setNode = document.getElementById('viewerSet');
+            const rarityNode = document.getElementById('viewerRarity');
+            const metaNode = document.getElementById('viewerMeta');
+            const idNode = document.getElementById('viewerId');
+
+            if (titleNode) titleNode.textContent = title;
+            if (brandNode) brandNode.textContent = brand;
+            if (setNode) setNode.textContent = set || 'GENESIS';
+            if (rarityNode) rarityNode.textContent = rarity.toUpperCase();
+            if (metaNode) metaNode.textContent = `${type} · ${category}`;
+            if (idNode) idNode.textContent = `#${String(mint).padStart(4, '0')}`;
+        }
+
+        function handleParallax(event) {
+            if (!viewerState.tracking) return;
+            const card = document.getElementById('cardViewer');
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            const relX = (event.clientX - rect.left) / rect.width - 0.5;
+            const relY = (event.clientY - rect.top) / rect.height - 0.5;
+            const tiltX = viewerState.rotateX - relY * (viewerState.parallax / 2);
+            const tiltY = viewerState.rotateY + relX * (viewerState.parallax / 2);
+            card.style.setProperty('--rotateX', `${tiltX}deg`);
+            card.style.setProperty('--rotateY', `${tiltY}deg`);
+
+            const angles = document.getElementById('viewerAnglesReadout');
+            if (angles) angles.textContent = `${Math.round(tiltX)}° / ${Math.round(tiltY)}°`;
+        }
+
+        function initCardViewer() {
+            document.querySelectorAll('.menu-trigger').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleMenus(btn.dataset.target, btn);
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.menu-popover') && !e.target.closest('.menu-trigger')) {
+                    closeMenus();
+                }
+            });
+
+            const stage = document.querySelector('.viewer-stage');
+            if (stage) {
+                stage.addEventListener('mousemove', handleParallax);
+                stage.addEventListener('mouseleave', applyViewerState);
+            }
+
+            const linkRange = (id, cb) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', () => cb(el.value));
+                }
+            };
+
+            linkRange('viewerRotate', val => { viewerState.rotateY = parseFloat(val); applyViewerState(); });
+            linkRange('viewerTilt', val => { viewerState.rotateX = parseFloat(val); applyViewerState(); });
+            linkRange('viewerDepth', val => { viewerState.depth = parseFloat(val); applyViewerState(); });
+            linkRange('viewerGlow', val => { viewerState.glow = parseFloat(val); applyViewerState(); });
+            linkRange('viewerShine', val => { viewerState.shine = parseFloat(val) / 100; applyViewerState(); });
+            linkRange('viewerShineAngle', val => { viewerState.shineAngle = parseFloat(val); applyViewerState(); });
+            linkRange('viewerOverlay', val => { viewerState.overlay = parseFloat(val) / 100; applyViewerState(); });
+            linkRange('viewerShineAlpha', val => { viewerState.shine = parseFloat(val) / 100; applyViewerState(); });
+            linkRange('viewerFlip', val => { viewerState.flip = parseFloat(val); applyViewerState(); });
+            linkRange('viewerSpinSpeed', val => { viewerState.spinSpeed = parseFloat(val); applyViewerState(); });
+            linkRange('viewerParallax', val => { viewerState.parallax = parseFloat(val); });
+
+            const trackingToggle = document.getElementById('viewerTracking');
+            if (trackingToggle) {
+                trackingToggle.addEventListener('change', () => {
+                    viewerState.tracking = trackingToggle.checked;
+                    applyViewerState();
+                });
+            }
+
+            const autoSpinToggle = document.getElementById('viewerAutoSpin');
+            if (autoSpinToggle) {
+                autoSpinToggle.addEventListener('change', () => {
+                    viewerState.autoSpin = autoSpinToggle.checked;
+                    applyViewerState();
+                });
+            }
+
+            ['cardName', 'brand', 'setName', 'rarity', 'cardType', 'category', 'mintNumber'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateViewerText);
+            });
+
+            updateViewerText();
+            applyViewerState();
+        }
+
         // Initialize badge grid
         function initBadgeGrid() {
             const grid = document.getElementById('badgeGrid');
@@ -2269,12 +2873,12 @@
         }
 
         // Image upload handlers
-        function setupFileUpload(inputId, previewId, uploadId) {
+        function setupFileUpload(inputId, previewId, uploadId, onPreview) {
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
             const upload = document.getElementById(uploadId);
             const container = document.getElementById(previewId + 'Container');
-            
+
             input.addEventListener('change', (e) => {
                 if (e.target.files[0]) {
                     const reader = new FileReader();
@@ -2282,6 +2886,9 @@
                         preview.src = e2.target.result;
                         container.style.display = 'block';
                         upload.classList.add('has-file');
+                        if (typeof onPreview === 'function') {
+                            onPreview(e2.target.result);
+                        }
                     };
                     reader.readAsDataURL(e.target.files[0]);
                 }
@@ -2647,7 +3254,10 @@
                     document.querySelectorAll('input[type="range"]').forEach(input => {
                         input.dispatchEvent(new Event('input'));
                     });
-                    
+
+                    updateViewerText();
+                    applyViewerState();
+
                     // Show stats
                     const stats = dcard.getStats(card);
                     document.getElementById('statsGrid').innerHTML = `
@@ -2687,11 +3297,12 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            initCardViewer();
             initBadgeGrid();
-            
+
             // Setup file uploads
-            setupFileUpload('cardFront', 'frontPreview', 'frontUpload');
-            setupFileUpload('cardBack', 'backPreview', 'backUpload');
+            setupFileUpload('cardFront', 'frontPreview', 'frontUpload', (src) => updateCardViewerFace('front', src));
+            setupFileUpload('cardBack', 'backPreview', 'backUpload', (src) => updateCardViewerFace('back', src));
             setupFileUpload('holographicPattern', 'holoPreview', 'holoUpload');
             setupFileUpload('specialtyOverlay', 'specialtyPreview', 'specialtyUpload');
             setupFileUpload('brandLogo', 'brandLogoPreview', 'brandLogoUpload');
