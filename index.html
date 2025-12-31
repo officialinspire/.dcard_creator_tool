@@ -382,6 +382,14 @@
             transform: rotateY(180deg);
         }
 
+        .viewer-card-face.back .viewer-card-content {
+            transition: opacity 0.25s ease;
+        }
+
+        .viewer-card-face.back.has-image .viewer-card-content {
+            opacity: 0;
+        }
+
         .viewer-card-image {
             width: 100%;
             height: 100%;
@@ -2761,10 +2769,16 @@
 
         function updateCardViewerFace(face, src) {
             if (!src) return;
-            const target = document.getElementById(face === 'back' ? 'viewerBackImage' : 'viewerFrontImage');
+            const isBack = face === 'back';
+            const target = document.getElementById(isBack ? 'viewerBackImage' : 'viewerFrontImage');
             if (target) {
                 target.src = src;
                 target.style.display = 'block';
+            }
+
+            if (isBack) {
+                const backFace = document.getElementById('viewerBackFace');
+                if (backFace) backFace.classList.add('has-image');
             }
         }
 
