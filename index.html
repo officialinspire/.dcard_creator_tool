@@ -335,6 +335,8 @@
             grid-template-columns: 1fr;
             justify-items: center;
             gap: 18px;
+            perspective: 1800px;
+            perspective-origin: 50% 40%;
         }
 
         .viewer-gradient {
@@ -464,10 +466,21 @@
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.08),
                 0 12px 32px rgba(0, 0, 0, 0.35);
+            transform-style: preserve-3d;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
         .viewer-card-face.back {
             transform: rotateY(180deg);
+        }
+
+        .card-viewer.show-back .viewer-card-face.front {
+            opacity: 0;
+        }
+
+        .card-viewer.show-back .viewer-card-face.back {
+            opacity: 1;
         }
 
         .viewer-card-face.back .viewer-card-content {
@@ -2838,6 +2851,7 @@
             card.style.setProperty('--shineAngle', `${viewerState.shineAngle}deg`);
             card.style.setProperty('--flip', `${viewerState.flip}deg`);
             card.style.setProperty('--spinSpeed', `${viewerState.spinSpeed}s`);
+            card.classList.toggle('show-back', viewerState.flip >= 90);
 
             const combinedFilters = [
                 ...viewerFilterParts,
@@ -3198,6 +3212,19 @@
                     node.addEventListener('input', handler);
                     node.addEventListener('change', handler);
                 }
+            });
+
+            document.querySelectorAll('#assets-tab input[type="range"], #assets-tab input[type="color"], #assets-tab select, #advanced-tab input, #advanced-tab select').forEach(el => {
+                el.addEventListener('input', () => {
+                    updateViewerVisuals();
+                    updateViewerAnimations();
+                    applyViewerState();
+                });
+                el.addEventListener('change', () => {
+                    updateViewerVisuals();
+                    updateViewerAnimations();
+                    applyViewerState();
+                });
             });
 
             document.querySelectorAll('#metadata-tab input, #metadata-tab select, #badges-tab input, #badges-tab select, #advanced-tab input, #advanced-tab select').forEach(el => {
