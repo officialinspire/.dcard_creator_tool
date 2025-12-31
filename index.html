@@ -389,6 +389,52 @@
             filter: saturate(1.05);
         }
 
+        .viewer-overlay-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mix-blend-mode: screen;
+            opacity: 0.65;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .viewer-overlay-image.specialty {
+            mix-blend-mode: lighten;
+            opacity: 0.8;
+            filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.25));
+        }
+
+        .viewer-branding img {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .viewer-brand-logo,
+        .viewer-set-logo {
+            position: absolute;
+            border-radius: 14px;
+            padding: 8px;
+            max-width: 82px;
+            max-height: 82px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .viewer-brand-logo {
+            top: 14px;
+            right: 14px;
+        }
+
+        .viewer-set-logo {
+            bottom: 14px;
+            left: 14px;
+        }
+
         .viewer-card-overlay {
             position: absolute;
             inset: 0;
@@ -1440,6 +1486,12 @@
                 <div class="card-viewer auto-rotate" id="cardViewer" style="--rotateX: -8deg; --rotateY: 18deg; --spinSpeed: 16s; --overlayAlpha: 0.35; --shineAlpha: 0.45;">
                     <div class="viewer-card-face front">
                         <img id="viewerFrontImage" class="viewer-card-image" src="inspire.png" alt="Front preview">
+                        <img id="viewerHoloOverlayFront" class="viewer-overlay-image" alt="Holographic overlay preview" style="display: none;">
+                        <img id="viewerSpecialtyOverlayFront" class="viewer-overlay-image specialty" alt="Specialty overlay preview" style="display: none;">
+                        <div class="viewer-branding">
+                            <img id="viewerBrandLogoFront" class="viewer-brand-logo" alt="Brand logo preview" style="display: none;">
+                            <img id="viewerSetLogoFront" class="viewer-set-logo" alt="Set logo preview" style="display: none;">
+                        </div>
                         <div class="viewer-card-overlay"></div>
                         <div class="viewer-card-shine"></div>
                         <div class="viewer-card-content">
@@ -1459,6 +1511,12 @@
                     </div>
                     <div class="viewer-card-face back" id="viewerBackFace">
                         <img id="viewerBackImage" class="viewer-card-image" src="inspire.png" alt="Back preview">
+                        <img id="viewerHoloOverlayBack" class="viewer-overlay-image" alt="Holographic overlay preview" style="display: none;">
+                        <img id="viewerSpecialtyOverlayBack" class="viewer-overlay-image specialty" alt="Specialty overlay preview" style="display: none;">
+                        <div class="viewer-branding">
+                            <img id="viewerBrandLogoBack" class="viewer-brand-logo" alt="Brand logo preview" style="display: none;">
+                            <img id="viewerSetLogoBack" class="viewer-set-logo" alt="Set logo preview" style="display: none;">
+                        </div>
                         <div class="viewer-card-overlay"></div>
                         <div class="viewer-card-shine"></div>
                         <div class="viewer-card-content" style="justify-content: center; text-align: center;">
@@ -2689,10 +2747,41 @@
             document.querySelectorAll('.menu-trigger').forEach(btn => btn.classList.remove('active'));
         }
 
+        function setPreviewLayer(id, src) {
+            const target = document.getElementById(id);
+            if (!target) return;
+
+            if (src) {
+                target.src = src;
+                target.style.display = 'block';
+            } else {
+                target.style.display = 'none';
+            }
+        }
+
         function updateCardViewerFace(face, src) {
             if (!src) return;
             const target = document.getElementById(face === 'back' ? 'viewerBackImage' : 'viewerFrontImage');
-            if (target) target.src = src;
+            if (target) {
+                target.src = src;
+                target.style.display = 'block';
+            }
+        }
+
+        function updateViewerOverlay(type, src) {
+            const targets = type === 'specialty'
+                ? ['viewerSpecialtyOverlayFront', 'viewerSpecialtyOverlayBack']
+                : ['viewerHoloOverlayFront', 'viewerHoloOverlayBack'];
+
+            targets.forEach(id => setPreviewLayer(id, src));
+        }
+
+        function updateViewerBranding(type, src) {
+            const targets = type === 'brand'
+                ? ['viewerBrandLogoFront', 'viewerBrandLogoBack']
+                : ['viewerSetLogoFront', 'viewerSetLogoBack'];
+
+            targets.forEach(id => setPreviewLayer(id, src));
         }
 
         function updateViewerText() {
@@ -3303,10 +3392,10 @@
             // Setup file uploads
             setupFileUpload('cardFront', 'frontPreview', 'frontUpload', (src) => updateCardViewerFace('front', src));
             setupFileUpload('cardBack', 'backPreview', 'backUpload', (src) => updateCardViewerFace('back', src));
-            setupFileUpload('holographicPattern', 'holoPreview', 'holoUpload');
-            setupFileUpload('specialtyOverlay', 'specialtyPreview', 'specialtyUpload');
-            setupFileUpload('brandLogo', 'brandLogoPreview', 'brandLogoUpload');
-            setupFileUpload('setLogo', 'setLogoPreview', 'setLogoUpload');
+            setupFileUpload('holographicPattern', 'holoPreview', 'holoUpload', (src) => updateViewerOverlay('holo', src));
+            setupFileUpload('specialtyOverlay', 'specialtyPreview', 'specialtyUpload', (src) => updateViewerOverlay('specialty', src));
+            setupFileUpload('brandLogo', 'brandLogoPreview', 'brandLogoUpload', (src) => updateViewerBranding('brand', src));
+            setupFileUpload('setLogo', 'setLogoPreview', 'setLogoUpload', (src) => updateViewerBranding('set', src));
             
             // Setup range inputs
             setupRangeInput('glowIntensity', 'glowIntensityValue');
